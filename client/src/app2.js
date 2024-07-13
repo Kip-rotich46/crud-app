@@ -1,19 +1,18 @@
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import { BrowserRouter as Routes, Route, Router, Link } from 'react-router-dom';
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import Home from './Pages/Home/Home';
 import CreatePost from './Pages/CreatePost/CreatePost';
-import SinglePost from './Pages/SinglePost/SinglePost';
-import AuthPage from './Pages/Auth/AuthPage';
 
 import "./App.css";
+import SinglePost from './Pages/SinglePost/SinglePost';
 
 function App() {
 
 
   return (
     <div className="App">
-      <Router>
+      <Routes>
         <nav class="navbar navbar-expand-lg bg-body-tertiary">
           <div class="container-fluid">
             <Link to='/' className="navbar-brand">Home</Link>
@@ -23,23 +22,21 @@ function App() {
             <div class="collapse navbar-collapse" id="navbarNav">
               <ul class="navbar-nav">
                 <li class="nav-item">
-                  <Link to='/createPost' className="navbar-brand">Create Post</Link>
-                </li>
-                <li class="nav-item">
-                  <Link to='/auth' className="navbar-brand">Auth</Link>
-                </li>
+                <Link to='/createPost' className="navbar-brand">Create Post</Link>
+
+                </li>               
+                
               </ul>
             </div>
           </div>
         </nav>
-        <Routes>
+        <Router>
           <Route path='/' element={<Home />} />
           <Route path='/createPost' element={<CreatePost />} />
-          <Route path="/post/:id" element={<SinglePost />} />
-          <Route path="/auth" element={<AuthPage />} />         
+          <Route path='/singlePost/:id' element={<SinglePost />} />
 
-        </Routes>
-      </Router>
+        </Router>
+      </Routes>
 
     </div>
   );

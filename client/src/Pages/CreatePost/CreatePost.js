@@ -1,81 +1,53 @@
-import React from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
-import axios from "axios";
+import React, {useState} from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const CreatePost = () => {
+    const [title, setTitle] = useState('');
+    const [content, setContent] = useState('');
+    const navigate = useNavigate();
 
     const handleSubmit = async (event) => {
-        event.preventDefault(); // Prevent default form submission behavior
+        event.preventDefault();
 
-        // Extract input values using event.target
-        const title = event.target.elements.inputTitle.value;
-        const postText = event.target.elements.inputPost.value;
-        const username = event.target.elements.inputUsername.value;
+        const token = localStorage.getItem('token'); // Retrieve token from localStorage or state
 
-        const data = { title, postText, username };
-
-        // Log the data to the console
         try {
-            const res = await axios.post("http://localhost:3001/posts", data);
+            const res = await axios.post("http://localhost:3001/posts", {
+                title,
+                content
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}` // Include JWT token in Authorization header
+                }
+            });
+
             console.log(res.data);
+            navigate('/'); // Redirect to home page after successful post creation
         } catch (error) {
             console.error("Error:", error);
+            // Handle error response from server
         }
     };
-    
+
     return (
-        <div className="" >
-            <div className=" mt-5 input-group ">
-                <div className="row ">
-                    <div className="">
-                        <div className="card">
-                            <div className="card-body">
-                                <h5 className="card-title">Input Form</h5>
-                                <form onSubmit={handleSubmit}>
-                                    <div className="mb-3">
-                                        <label htmlFor="inputTitle" className="form-label">
-                                            Title
-                                        </label>
-                                        <input
-                                            type="text"
-                                            name='inputTitle'
-                                            className="form-control"
-                                            id="inputTitle"
-                                            placeholder="Enter title..."
-                                        />
-                                    </div>
-                                    <div className="mb-3">
-                                        <label htmlFor="inputPost" className="form-label">
-                                            Post
-                                        </label>
-                                        <div className="form-floating">
-                                            <textarea className="form-control" placeholder="Leave a comment here" id="inputPost" name="inputPost"></textarea>
-                                            <label htmlFor="inputPost">Comments</label>
-                                        </div>
-                                    </div>
-                                    <div className="mb-3">
-                                        <label htmlFor="inputUsername" className="form-label">
-                                            Username
-                                        </label>
-                                        <input
-                                            type="text"
-                                            className="form-control"
-                                            id="inputUsername"
-                                            name='inputUsername'
-                                            placeholder="Enter username..."
-                                        />
-                                    </div>
-                                    <div className="mb-3 d-grid">
-                                    <button type="submit" className="btn btn-primary" >
-                                        CreatePost
-                                    </button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
+        <div className="container w-50">
+            <h1 className='mb-4'>Create Post</h1>
+            <form onSubmit={handleSubmit}>
+                <div className="form-group mb-3">
+                    <label htmlFor="inputTitle">Title</label>
+                    <input type="text" id="inputTitle" className="form-control" placeholder="Enter title..." required />
                 </div>
-            </div>
+                <div className="form-group mb-3">
+                    <label htmlFor="inputPost">Post</label>
+                    <textarea id="inputPost" className="form-control" placeholder="Leave a comment here"></textarea>
+                </div>
+                <div className="form-group mb-3">
+                    <label htmlFor="inputUsername">Username</label>
+                    <input type="text" id="inputUsername" className="form-control" placeholder="Enter username..." />
+                </div>
+                <button type="submit" className="btn btn-primary">Create Post</button>
+            </form>
         </div>
     );
 };
